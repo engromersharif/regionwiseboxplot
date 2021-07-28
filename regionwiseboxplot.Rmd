@@ -1,0 +1,468 @@
+---
+title: <center> <h1>  REGION OUTLIER DETAILS </h1> </center>
+author: "Omer Sharif"
+date: "7/27/2021"
+output: 
+ rmarkdown::html_document:
+  theme: journal
+  toc: true
+  toc_float: true
+  highlight: tango
+  number_sections: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+library(dplyr)
+library(viridis)
+library(DT)
+library(kableExtra)
+library(readxl)
+
+# Induct In Ethanol Excel Sheet
+Main <- read_excel("C:/Users/omer.sharif/Desktop/Office Computer/Capstone/R Codes/Ethanol Dashboard/Jun 2021/Main.xlsm")
+```
+
+# INTERACTIVE REPORT
+
+### `Box Plot`
+
+* Hover of the mouse on the _"Outlier"_ highlights _Prices_ and mouse hover on box itself highlights _'"Minimum and Maximum Price"_ and _"Inter Quartile Ranges"_,
+* `Colours` represent different _Regions_.
+* Box plot is tool used to investigate range of the data (maximum and minimum values).
+
+```{r products,echo=FALSE,fig.align='center',fig.width=9,fig.height=5}
+
+REGION <- as.factor(Main$REGION)
+p <- ggplot(data=Main,aes(x=REGION,y=`M.Ton Price`,colour=REGION))
+p <- p + geom_boxplot() + guides(fill="none") + scale_fill_viridis() + coord_flip()
+p <- p + theme(legend.position = "", plot.title=element_text(hjust=0.5))+labs(x="",y="",title="REGION WISE PRICE PER M.TON YEAR 2017 TO 2021")
+p <- p + facet_grid(.~Year,scales = "free") 
+p <- ggplotly(p) 
+hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALSE)
+
+```
+
+### `Histogram Plot` 
+* Hover of the mouse over a bar shows _"Frequency", "Price Bin", and "Product"_.
+* Drag the mouse over a section of the graph to zoom in and Double click to zoom out.
+* The **Histogram** tool is a method that uses bars (or rectangles) to represent the distribution (such as the frequency, percentage, or proportion) of data by placing each data value in an appropriate class interval. It is useful for examining the spread of the data set.
+
+```{r,echo=FALSE,fig.align='center',fig.width=9,fig.height=7}
+Year <- as.factor(Main$Year)
+REGION <- as.factor(Main$REGION)
+
+p <- ggplot(data=Main,aes(x=`M.Ton Price`,colour= REGION))
+p <- p + geom_histogram(alpha = 0.2,bins=35) + facet_grid(REGION~., scales = "free") + 
+  theme (legend.position = "") + labs(x="",y="")
+p <- p + scale_fill_viridis_d() 
+p <- ggplotly(p) 
+hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALSE)
+
+```
+
+# OUTLIER DATA
+
+* Following are _`Outlier`_ tables based on _Year_ and _Region_ basis.
+* Tables are preceded by Count of _`Outlier`_ within a category.
+* Each record in the table below is unique. 
+
+## YEAR 2021
+
+### * `AFRICA`
+
+```{r,message= FALSE}
+
+Main_AFRICA_2021 <-  Main %>% filter(REGION == "AFRICA" & Year == "2021") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AFRICA_2021$`M.Ton Price`)$out
+out_ind <- which(Main_AFRICA_2021$`M.Ton Price` %in% c(out))
+x <- Main_AFRICA_2021[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+### * `AMERICA`
+
+```{r,message= FALSE}
+Main_AMERICA_2021 <-  Main %>% filter(REGION == "AMERICA" & Year == "2021") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AMERICA_2021$`M.Ton Price`)$out
+out_ind <- which(Main_AMERICA_2021$`M.Ton Price` %in% c(out))
+x <- Main_AMERICA_2021[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+### * `ASIA`
+
+```{r,message= FALSE}
+Main_ASIA_2021 <-  Main %>% filter(REGION == "ASIA" & Year == "2021") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_ASIA_2021$`M.Ton Price`)$out
+out_ind <- which(Main_ASIA_2021$`M.Ton Price` %in% c(out))
+x <- Main_ASIA_2021[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `AUSTRALIA` 
+
+```{r,message= FALSE}
+
+Main_AUSTRALIA_2021 <-  Main %>% filter(REGION == "AUSTRALIA" & Year == "2021") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AUSTRALIA_2021$`M.Ton Price`)$out
+out_ind <- which(Main_AUSTRALIA_2021$`M.Ton Price` %in% c(out))
+x <- Main_AUSTRALIA_2021[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+### * `EUROPE`
+```{r,message= FALSE}
+
+Main_EUROPE_2021 <-  Main %>% filter(REGION == "EUROPE" & Year == "2021") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_EUROPE_2021$`M.Ton Price`)$out
+out_ind <- which(Main_EUROPE_2021$`M.Ton Price` %in% c(out))
+x <- Main_EUROPE_2021[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+### * `MIDDLE EAST`
+```{r,message= FALSE}
+
+Main_MIDDLEEAST_2021 <-  Main %>% filter(REGION == "MIDDLE EAST" & Year == "2021") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_MIDDLEEAST_2021$`M.Ton Price`)$out
+out_ind <- which(Main_MIDDLEEAST_2021$`M.Ton Price` %in% c(out))
+x <- Main_MIDDLEEAST_2021[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+## YEAR 2020
+
+### * `AFRICA`
+
+```{r,message= FALSE}
+Main_AFRICA_2020 <-  Main %>% filter(REGION == "AFRICA" & Year == "2020") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AFRICA_2020$`M.Ton Price`)$out
+out_ind <- which(Main_AFRICA_2020$`M.Ton Price` %in% c(out))
+x <- Main_AFRICA_2020[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `AMERICA`
+```{r,message= FALSE}
+Main_AMERICA_2020 <-  Main %>% filter(REGION == "AMERICA" & Year == "2020") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AMERICA_2020$`M.Ton Price`)$out
+out_ind <- which(Main_AMERICA_2020$`M.Ton Price` %in% c(out))
+x <- Main_AMERICA_2020[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `ASIA`
+
+```{r,message= FALSE}
+Main_ASIA_2020 <-  Main %>% filter(REGION == "ASIA" & Year == "2020") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_ASIA_2020$`M.Ton Price`)$out
+out_ind <- which(Main_ASIA_2020$`M.Ton Price` %in% c(out))
+x <- Main_ASIA_2020[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `AUSTRALIA` 
+
+```{r,message= FALSE}
+Main_AUSTRALIA_2020 <-  Main %>% filter(REGION == "AUSTRALIA" & Year == "2020") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AUSTRALIA_2020$`M.Ton Price`)$out
+out_ind <- which(Main_AUSTRALIA_2020$`M.Ton Price` %in% c(out))
+x <- Main_AUSTRALIA_2020[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+### * `EUROPE` 
+
+```{r,message= FALSE}
+Main_EUROPE_2020 <-  Main %>% filter(REGION == "EUROPE" & Year == "2020") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_EUROPE_2020$`M.Ton Price`)$out
+out_ind <- which(Main_EUROPE_2020$`M.Ton Price` %in% c(out))
+x <- Main_EUROPE_2020[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+### * `MIDDLE EAST`
+```{r,message= FALSE}
+Main_MIDDLEEAST_2020 <-  Main %>% filter(REGION == "MIDDLE EAST" & Year == "2020") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_MIDDLEEAST_2020$`M.Ton Price`)$out
+out_ind <- which(Main_MIDDLEEAST_2020$`M.Ton Price` %in% c(out))
+x <- Main_MIDDLEEAST_2020[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+
+## YEAR 2019
+
+### * `AFRICA`
+
+```{r,message= FALSE}
+
+Main_AFRICA_2019 <-  Main %>% filter(REGION == "AFRICA" & Year == "2019") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AFRICA_2019$`M.Ton Price`)$out
+out_ind <- which(Main_AFRICA_2019$`M.Ton Price` %in% c(out))
+x <- Main_AFRICA_2019[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+
+```
+
+
+### * `AMERICA`
+```{r,message= FALSE}
+Main_AMERICA_2019 <-  Main %>% filter(REGION == "AMERICA" & Year == "2019") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AMERICA_2019$`M.Ton Price`)$out
+out_ind <- which(Main_AMERICA_2019$`M.Ton Price` %in% c(out))
+x <- Main_AMERICA_2019[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+### * `ASIA`
+
+```{r,message= FALSE}
+
+Main_ASIA_2019 <-  Main %>% filter(REGION == "ASIA" & Year == "2019") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_ASIA_2019$`M.Ton Price`)$out
+out_ind <- which(Main_ASIA_2019$`M.Ton Price` %in% c(out))
+x <- Main_ASIA_2019[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+### * `AUSTRALIA` 
+
+```{r,message= FALSE}
+Main_AUSTRALIA_2019 <-  Main %>% filter(REGION == "AUSTRALIA" & Year == "2019") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AUSTRALIA_2019$`M.Ton Price`)$out
+out_ind <- which(Main_AUSTRALIA_2019$`M.Ton Price` %in% c(out))
+x <- Main_AUSTRALIA_2019[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+
+```
+
+
+### * `EUROPE`
+```{r,message= FALSE}
+Main_EUROPE_2019 <-  Main %>% filter(REGION == "EUROPE" & Year == "2019") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_EUROPE_2019$`M.Ton Price`)$out
+out_ind <- which(Main_EUROPE_2019$`M.Ton Price` %in% c(out))
+x <- Main_EUROPE_2019[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+
+
+### * `MIDDLE EAST`
+```{r,message= FALSE}
+Main_MIDDLEEAST_2019 <-  Main %>% filter(REGION == "MIDDLE EAST" & Year == "2019") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_MIDDLEEAST_2019$`M.Ton Price`)$out
+out_ind <- which(Main_MIDDLEEAST_2019$`M.Ton Price` %in% c(out))
+x <- Main_MIDDLEEAST_2019[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+
+## YEAR 2018
+
+### * `AFRICA`
+```{r,message= FALSE}
+Main_AFRICA_2018 <-  Main %>% filter(REGION == "AFRICA" & Year == "2018") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AFRICA_2018$`M.Ton Price`)$out
+out_ind <- which(Main_AFRICA_2018$`M.Ton Price` %in% c(out))
+x <- Main_AFRICA_2018[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+### * `AMERICA`
+```{r,message= FALSE}
+Main_AMERICA_2018 <-  Main %>% filter(REGION == "AMERICA" & Year == "2018") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AMERICA_2018$`M.Ton Price`)$out
+out_ind <- which(Main_AMERICA_2018$`M.Ton Price` %in% c(out))
+x <- Main_AMERICA_2018[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+
+### * `ASIA`
+
+```{r,message= FALSE}
+Main_ASIA_2018 <-  Main %>% filter(REGION == "ASIA" & Year == "2018") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_ASIA_2018$`M.Ton Price`)$out
+out_ind <- which(Main_ASIA_2018$`M.Ton Price` %in% c(out))
+x <- Main_ASIA_2018[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `AUSTRALIA` 
+
+```{r,message= FALSE}
+
+Main_AUSTRALIA_2018 <-  Main %>% filter(REGION == "AUSTRALIA" & Year == "2018") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AUSTRALIA_2018$`M.Ton Price`)$out
+out_ind <- which(Main_AUSTRALIA_2018$`M.Ton Price` %in% c(out))
+x <- Main_AUSTRALIA_2018[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+
+```
+
+
+### * `EUROPE` 
+```{r,message= FALSE}
+Main_EUROPE_2018 <-  Main %>% filter(REGION == "EUROPE" & Year == "2018") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_EUROPE_2018$`M.Ton Price`)$out
+out_ind <- which(Main_EUROPE_2018$`M.Ton Price` %in% c(out))
+x <- Main_EUROPE_2018[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+
+
+### * `MIDDLE EAST` 
+```{r,message= FALSE}
+Main_MIDDLEEAST_2018 <-  Main %>% filter(REGION == "MIDDLE EAST" & Year == "2018") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_MIDDLEEAST_2018$`M.Ton Price`)$out
+out_ind <- which(Main_MIDDLEEAST_2018$`M.Ton Price` %in% c(out))
+x <- Main_MIDDLEEAST_2018[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+
+
+## YEAR 2017
+
+### * `AFRICA`
+```{r,message= FALSE}
+Main_AFRICA_2017 <-  Main %>% filter(REGION == "AFRICA" & Year == "2017") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AFRICA_2017$`M.Ton Price`)$out
+out_ind <- which(Main_AFRICA_2017$`M.Ton Price` %in% c(out))
+x <- Main_AFRICA_2017[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `AMERICA`
+```{r,message= FALSE}
+Main_AMERICA_2017 <-  Main %>% filter(REGION == "AMERICA" & Year == "2017") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AMERICA_2017$`M.Ton Price`)$out
+out_ind <- which(Main_AMERICA_2017$`M.Ton Price` %in% c(out))
+x <- Main_AMERICA_2017[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `ASIA`
+
+```{r,message= FALSE}
+Main_ASIA_2017 <-  Main %>% filter(REGION == "ASIA" & Year == "2017") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_ASIA_2017$`M.Ton Price`)$out
+out_ind <- which(Main_ASIA_2017$`M.Ton Price` %in% c(out))
+x <- Main_ASIA_2017[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+### * `AUSTRALIA` 
+
+```{r,message= FALSE}
+Main_AUSTRALIA_2017 <-  Main %>% filter(REGION == "AUSTRALIA" & Year == "2017") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_AUSTRALIA_2017$`M.Ton Price`)$out
+out_ind <- which(Main_AUSTRALIA_2017$`M.Ton Price` %in% c(out))
+x <- Main_AUSTRALIA_2017[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+### * `EUROPE`
+```{r,message= FALSE}
+Main_EUROPE_2017 <-  Main %>% filter(REGION == "EUROPE" & Year == "2017") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_EUROPE_2017$`M.Ton Price`)$out
+out_ind <- which(Main_EUROPE_2017$`M.Ton Price` %in% c(out))
+x <- Main_EUROPE_2017[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
+
+
+### * `MIDDLE EAST`
+```{r,message= FALSE}
+Main_MIDDLEEAST_2017 <-  Main %>% filter(REGION == "MIDDLE EAST" & Year == "2017") %>% select (Month,Product,COUNTRY,EXPORTER,IMPORTER,`M.Ton Price`,`QTY. (MT)`,`VALUE ($USD)`)
+out <- boxplot.stats(Main_MIDDLEEAST_2017$`M.Ton Price`)$out
+out_ind <- which(Main_MIDDLEEAST_2017$`M.Ton Price` %in% c(out))
+x <- Main_MIDDLEEAST_2017[out_ind,] %>% arrange(desc(`M.Ton Price`))
+count <- x %>% tally() %>% as_tibble() %>% rename(Count =n)
+kbl(count)  %>% kable_paper("hover", full_width = F)
+datatable(x)
+```
