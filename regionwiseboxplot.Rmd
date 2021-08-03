@@ -33,6 +33,15 @@ library(readxl)
 Main <- read_excel("C:/Users/omer.sharif/Desktop/Office Computer/Capstone/R Codes/Ethanol Dashboard/Jun 2021/Main.xlsm")
 ```
 
+
+```{r echo=FALSE,out.width='100%'}
+
+knitr::include_graphics('./img/logo.jpg')
+
+```
+
+
+
 # INTERACTIVE REPORT
 
 ### `Box Plot`
