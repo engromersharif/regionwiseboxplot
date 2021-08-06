@@ -71,14 +71,29 @@ hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALS
 Year <- as.factor(Main$Year)
 REGION <- as.factor(Main$REGION)
 
-p <- ggplot(data=Main,aes(x=`M.Ton Price`,colour= REGION))
-p <- p + geom_histogram(alpha = 0.2,bins=35) + facet_grid(REGION~., scales = "free") + 
+p <- ggplot(data=Main,aes(x=`M.Ton Price`,y=..count..,colour= REGION))
+p <- p + geom_histogram(alpha = 0.2,bins=35) + facet_grid(REGION~Year,scales="free_y") + 
   theme (legend.position = "") + labs(x="",y="")
 p <- p + scale_fill_viridis_d() 
+p <- ggplotly(p,tooltip = "y") 
+hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALSE)
+
+```
+
+### `Interactive Time Plot Series`
+
+* Below are price _regression lines_ of all Regions. Aids the eye in seeing **patterns** in the presence of over plotting.  
+
+```{r regressionplot,echo=FALSE,fig.align='right',fig.width=10,fig.height=6}
+
+REGION <- as.factor(Main$REGION)
+p <- ggplot(data=Main,aes(x=DATE,y=`M.Ton Price`,colour=REGION)) + geom_jitter(alpha=0.1) + geom_smooth(method = "lm", formula = y ~ splines::bs(x, 3),se=FALSE)
 p <- ggplotly(p) 
 hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALSE)
 
 ```
+
+
 
 # OUTLIER DATA
 
