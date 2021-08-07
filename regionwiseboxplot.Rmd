@@ -87,8 +87,8 @@ hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALS
 ```{r regressionplot,echo=FALSE,fig.align='right',fig.width=10,fig.height=6}
 
 REGION <- as.factor(Main$REGION)
-p <- ggplot(data=Main,aes(x=DATE,y=`M.Ton Price`,colour=REGION)) + geom_jitter(alpha=0.1) + geom_smooth(method = "lm", formula = y ~ splines::bs(x, 3),se=FALSE)
-p <- ggplotly(p) 
+p <- ggplot(data=Main,aes(x=DATE,y=`M.Ton Price`)) + geom_jitter(alpha=0.1) + geom_smooth(method = "lm", formula = y ~ splines::bs(x, 3),se=FALSE) + labs(y="") +  facet_grid(REGION~.)
+p <- ggplotly(p,tooltip = "y") 
 hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALSE)
 
 ```
