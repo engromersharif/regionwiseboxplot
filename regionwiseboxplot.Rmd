@@ -6,7 +6,7 @@ knit: (function(input_file, encoding) {
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Omer Sharif"
-date: "7/27/2021"
+date: "08/20/2021"
 output: 
  rmarkdown::html_document:
   theme: journal
@@ -30,7 +30,7 @@ library(kableExtra)
 library(readxl)
 
 # Induct In Ethanol Excel Sheet
-Main <- read_excel("C:/Users/omer.sharif/Desktop/Office Computer/Capstone/R Codes/Ethanol Dashboard/Jun 2021/Main.xlsm")
+Main <- read_excel("C:/Users/omer.sharif/Desktop/Office Computer/Capstone/R Codes/Ethanol Dashboard/Jul 2021/Main.xlsm")
 ```
 
 
@@ -100,6 +100,7 @@ hide_legend(p) %>% config(displaylogo = FALSE) %>%  config(displayModeBar = FALS
 * Following are _`Outlier`_ tables based on _Year_ and _Region_ basis.
 * Tables are preceded by Count of _`Outlier`_ within a category.
 * Each record in the table below is unique. 
+* [Here is a link to my Outlier File in Microsoft Excel](https://app.box.com/s/v3x0padejtmdtbur4zuoy7maqhanrug1)
 
 ## YEAR 2021
 
